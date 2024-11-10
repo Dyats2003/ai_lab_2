@@ -6,23 +6,11 @@ import random
 import time
 
 
-def create_grid(n, blue_ratio=0.45, red_ratio=0.45):
+def create_grid(n, blue_ratio=0.45, red_ratio=0.45, empty_ratio=0.1):
     """Создаем начальную сетку с заданным процентным соотношением клеток."""
-    total_cells = n * n
-    num_blue = int(blue_ratio * total_cells)
-    num_red = int(red_ratio * total_cells)
-    num_empty = total_cells - num_blue - num_red  # Оставшиеся клетки - пустые
-
-    # Создаем список с точным количеством каждой клетки
-    cells = [1] * num_blue + [2] * num_red + [0] * num_empty
+    cells = [1] * int(blue_ratio * n * n) + [2] * int(red_ratio * n * n) + [0] * int(empty_ratio * n * n)
     np.random.shuffle(cells)
     grid = np.array(cells).reshape(n, n)
-
-    # Отладочный вывод для проверки распределения
-    print("Количество синих клеток:", np.sum(grid == 1))
-    print("Количество красных клеток:", np.sum(grid == 2))
-    print("Количество пустых клеток:", np.sum(grid == 0))
-
     return grid
 
 
@@ -65,7 +53,7 @@ def simulate_step(grid):
     return True
 
 
-def run_simulation(n, steps=10, delay=0.5):
+def run_simulation(n, steps, delay):
     """Запускаем симуляцию и обновляем визуализацию сетки в Jupyter Notebook."""
     grid = create_grid(n)
     cmap = ListedColormap(['white', 'blue', 'red'])
